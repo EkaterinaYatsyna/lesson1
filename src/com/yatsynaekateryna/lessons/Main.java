@@ -25,21 +25,15 @@ public class Main {
 
         //4. Вывести числа 0 1 3 7 15 31 63 … MAX_INTEGER
         System.out.println();
-        int a = 0;
-        System.out.println(a);
-        for (; a < Integer.MAX_VALUE; ) {
-            a = a * 2 + 1;
-            System.out.println(a);
+        for (int i = 0; i <= Integer.MAX_VALUE && i >= 0; i = i * 2 + 1) {
+            System.out.println(i);
         }
 
-        //5. Вывести предыдущее задание в 2 системе счисления. (второй вариант вывода)
+        //5. Вывести предыдущее задание в 2 системе счисления.
         System.out.println();
 
-        for (int i=0; i < Integer.MAX_VALUE; i = i * 2 + 1) {
+        for (int i = 0; i <= Integer.MAX_VALUE && i >= 0; i = i * 2 + 1) {
             System.out.println(Integer.toBinaryString(i));
-            if (i * 2 + 1==Integer.MAX_VALUE){
-                System.out.println(Integer.toBinaryString(i * 2 + 1));
-            }
         }
 
         //6. Написать числом серый цвет, зеленый, голубой, любой какой хотите. Например красный 0xFF0000 в 16 ричной. Выведите все цвета в 10 ричной.
