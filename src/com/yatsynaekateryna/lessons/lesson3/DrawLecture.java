@@ -29,7 +29,7 @@ public class DrawLecture {
             ImageUtil.getImageFromPixels(pixels);
         }
 
-        if (true) {
+        if (false) {
             int h = 600;
             int w = 800;
             int r = 150;
@@ -55,6 +55,31 @@ public class DrawLecture {
 
             }
             ImageUtil.getImageFromPixels(pixels);
+        }
+
+        //7. Перевернуть картинку слева направо.
+        if (false) {
+            int[][] pictureTurnLeftToRight = ImageUtil.getPixelsFromImage("picture.jpg");
+            for (int i = 0; i < pictureTurnLeftToRight.length - 1; i++) {
+                for (int j = 0, k = pictureTurnLeftToRight[i].length - 1; j < k; j++, k--) {
+                    pictureTurnLeftToRight[i][j] += pictureTurnLeftToRight[i][k];
+                    pictureTurnLeftToRight[i][k] = pictureTurnLeftToRight[i][j] - pictureTurnLeftToRight[i][k];
+                    pictureTurnLeftToRight[i][j] = pictureTurnLeftToRight[i][j] - pictureTurnLeftToRight[i][k];
+                }
+            }
+            ImageUtil.getImageFromPixels(pictureTurnLeftToRight);
+        }
+
+        //8. Повернуть картинку на угол 90 градусов.
+        if (true) {
+            int[][] originalPicture = ImageUtil.getPixelsFromImage("picture.jpg");
+            int[][] pictureRotate90Degrees = new int[originalPicture[0].length][originalPicture.length];
+            for (int i = 0; i < originalPicture.length - 1; i++) {
+                for (int j = 0, k = originalPicture[i].length - 1; j < originalPicture[i].length - 1; j++, k--) {
+                    pictureRotate90Degrees[k][i] = originalPicture[i][j];
+                }
+            }
+            ImageUtil.getImageFromPixels(pictureRotate90Degrees);
         }
     }
 }

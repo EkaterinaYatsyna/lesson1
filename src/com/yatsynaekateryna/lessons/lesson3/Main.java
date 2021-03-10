@@ -52,7 +52,7 @@ public class Main {
                 print_test_5(i, j - 1, arr);
                 System.out.print(arr[i][j] + " ");
             } else {
-                print_test_5(i + 1, j = arr[i].length - 1, arr);
+                print_test_5(i + 1, arr[i].length - 1, arr);
                 System.out.println();
             }
         }
@@ -64,7 +64,7 @@ public class Main {
                 print_test_4(i, j + 1, arr);
                 System.out.print(arr[i][j] + " ");
             } else {
-                print_test_4(i - 1, j = 0, arr);
+                print_test_4(i - 1, 0, arr);
                 System.out.println();
             }
         }
