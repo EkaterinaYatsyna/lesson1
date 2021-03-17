@@ -77,7 +77,7 @@ public class Main {
                 print_test_3(i, j + 1, arr);
             } else {
                 System.out.println();
-                print_test_3(i + 1, j = 0, arr);
+                print_test_3(i + 1, 0, arr);
             }
         }
     }
