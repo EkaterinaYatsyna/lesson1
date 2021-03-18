@@ -29,13 +29,25 @@ public class main {
         // (для определения расстояний и проверок сделать отдельные методы)
         findPointsOnCircle();
 
+        //5. Одноклеточная амеба каждые 3 часа делится на 2 клетки.
+        //Определить, сколько клеток будет через 3, 6, 9, ..., 24 часа, если первоначально была одна амеба.
+        divisionAmoeba(24, 1);
     }
+
+    private static void divisionAmoeba(int hours, int cellsStart) {
+        int cells = cellsStart;
+        System.out.println("/n" + "Изначально клеток было: " + cellsStart);
+        for (int i = 3; i < hours + 1; i += 3) {
+            cells *= 2;
+            System.out.println("Через " + i + ((i % 10 == 3) ? " часа" : " часов") + " количество клеток будет: " + cells);
+        }
+    } //5. Деление клеток
 
     private static void findPointsOnCircle() {
 
         int[][] points = new int[6][2];
         Scanner givePoint = new Scanner(System.in);
-        System.out.print("\n" +"Введите радиус окружности: ");
+        System.out.print("\n" + "Введите радиус окружности: ");
         int radius = givePoint.nextInt();
         System.out.println("Введите координаты центра окружности: ");
         for (int i = 0; i < points.length; i++) {
