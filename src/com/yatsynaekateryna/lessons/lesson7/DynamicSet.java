@@ -1,7 +1,6 @@
 package com.yatsynaekateryna.lessons.lesson7;
 
 import java.util.Arrays;
-import java.util.*;
 
 public class DynamicSet implements ISet {
 
@@ -9,7 +8,7 @@ public class DynamicSet implements ISet {
     int len;
 
     public DynamicSet() {
-        arr = new int[1];
+        arr = new int[]{0};
         len = 0;
     }
 
@@ -29,16 +28,13 @@ public class DynamicSet implements ISet {
 
     public DynamicSet(ISet set) {
         if (set instanceof MutableSet || set instanceof ImmutableSet) {
-//            Object oSet = ISet.class.cast(set);
-//            DynamicSet dSet = new DynamicSet();
-
-            // dSet.add(oSet.val);
 
             MutableSet mSet = (MutableSet) set;
             DynamicSet dSet = new DynamicSet();
-            dSet.add(mSet.val);
+            char[] chars = Integer.toBinaryString(mSet.val).toCharArray();
+            dSet.add(chars.length - 1);
             arr = dSet.arr;
-            len = mSet.len;
+            len = dSet.len;
 
         } else {
             DynamicSet dSet = (DynamicSet) set;
@@ -79,6 +75,9 @@ public class DynamicSet implements ISet {
 
     @Override
     public String toString() {
+        if (arr.length == 1) {
+            return String.format("%32s", Integer.toBinaryString(arr[0])).replace(' ', '0');
+        }
         int[] arrEnd = new int[len];
         int IndexArrEnd = 0;
         for (int i = 0; i < arr.length; i++) {
