@@ -12,13 +12,15 @@ public class MutableSet implements ISet {
         len = 0;
     }
 
+    public MutableSet(int val) {
+        this.val = 1 << val;
+        this.len = Integer.bitCount(this.val);
+    }
+
     public MutableSet(int[] arr) {
-        char[] chars = new char[32];
-        Arrays.fill(chars, '0');
         for (int i : arr) {
-            chars[31 - i] = '1';
+            val = val | 1 << i;
         }
-        val = Integer.parseInt(String.valueOf(chars), 2);
         len = Integer.bitCount(val);
     }
 

@@ -13,17 +13,14 @@ public class ImmutableSet implements ISet {
     }
 
     public ImmutableSet(int val) {
-        this.val = val;
-        this.len = Integer.bitCount(val);
+        this.val = 1 << val;
+        this.len = Integer.bitCount(this.val);
     }
 
     public ImmutableSet(int[] arr) {
-        char[] chars = new char[32];
-        Arrays.fill(chars, '0');
         for (int i : arr) {
-            chars[31 - i] = '1';
+            val = val | 1 << i;
         }
-        val = Integer.parseInt(String.valueOf(chars), 2);
         len = Integer.bitCount(val);
     }
 

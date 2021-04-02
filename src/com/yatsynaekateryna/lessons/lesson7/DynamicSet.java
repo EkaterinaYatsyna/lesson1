@@ -8,7 +8,7 @@ public class DynamicSet implements ISet {
     int len;
 
     public DynamicSet() {
-        arr = new int[]{0};
+        arr = new int[1];
         len = 0;
     }
 
@@ -21,43 +21,23 @@ public class DynamicSet implements ISet {
         }
         arr = new int[max / 32 + 1];
         for (int i : val) {
-            arr[i / 32] = arr[i / 32] | 1 << i % 32;
+            arr[i / 32] = arr[i / 32] | 1 << (i % 32);
         }
         updateLen();
     }
 
     public DynamicSet(ISet set) {
-        if (set instanceof MutableSet || set instanceof ImmutableSet) {
-
-            MutableSet mSet = (MutableSet) set;
-            DynamicSet dSet = new DynamicSet();
-            char[] chars = Integer.toBinaryString(mSet.val).toCharArray();
-            dSet.add(chars.length - 1);
-            arr = dSet.arr;
-            len = dSet.len;
-
+        if (set instanceof MutableSet) {
+            arr = new int[]{((MutableSet) set).val};
+            updateLen();
+        } else if (set instanceof ImmutableSet) {
+            arr = new int[]{((ImmutableSet) set).val};
+            updateLen();
         } else {
             DynamicSet dSet = (DynamicSet) set;
             arr = dSet.arr;
             len = dSet.len;
         }
-    }
-
-    public static ISet setOf(int... vals) {
-        DynamicSet set = new DynamicSet();
-        for (int val : vals) {
-            int index = val / 32;
-
-            if (index > set.arr.length - 1) {
-                set.arr = Arrays.copyOf(set.arr, index + 1);
-            }
-            set.arr[index] = set.arr[index] | 1 << val % 32;
-        }
-        set.len = 0;
-        for (int i = 0; i < set.arr.length; i++) {
-            set.len += Integer.bitCount(set.arr[i]);
-        }
-        return set;
     }
 
     void updateLen() {
@@ -67,10 +47,11 @@ public class DynamicSet implements ISet {
         }
     }
 
-    void ensureCapacity(int ind) {
+    int[] ensureCapacity(int ind, int[] arr) {
         if (ind > arr.length - 1) {
             arr = Arrays.copyOf(arr, ind + 1);
         }
+        return arr;
     }
 
     @Override
@@ -81,10 +62,10 @@ public class DynamicSet implements ISet {
         int[] arrEnd = new int[len];
         int IndexArrEnd = 0;
         for (int i = 0; i < arr.length; i++) {
-            char[] chars = Integer.toString(arr[i], 2).toCharArray();
-            for (int j = chars.length - 1, k = 0; j > -1; j--, k++) {
-                if (chars[j] == '1') {
-                    arrEnd[IndexArrEnd] = 32 * i + k;
+            int indexLen = Integer.toBinaryString(arr[i]).length();
+            for (int j = 0, k = 1; j < indexLen; j++, k = k << 1) {
+                if ((arr[i] & k) != 0) {
+                    arrEnd[IndexArrEnd] = 32 * i + j;
                     IndexArrEnd++;
                 }
             }
@@ -119,7 +100,7 @@ public class DynamicSet implements ISet {
         }
         int Index = toAdd / 32;
         toAdd %= 32;
-        ensureCapacity(Index);
+        arr = ensureCapacity(Index, arr);
         arr[Index] = arr[Index] | (1 << toAdd);
         updateLen();
         return this;
@@ -141,7 +122,7 @@ public class DynamicSet implements ISet {
 
     @Override
     public ISet removeAll() {
-        arr = new int[0];
+        arr = new int[1];
         len = 0;
         return this;
     }
@@ -149,9 +130,11 @@ public class DynamicSet implements ISet {
     @Override
     public ISet and(ISet set) {
         DynamicSet dSet = new DynamicSet(set);
-        ensureCapacity(dSet.arr.length - 1);
+        int maxInd = Math.max(arr.length, dSet.arr.length) - 1;
+        arr = ensureCapacity(maxInd, arr);
+        dSet.arr = ensureCapacity(maxInd, dSet.arr);
 
-        for (int i = 0; i < dSet.arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = arr[i] & dSet.arr[i];
         }
 
@@ -162,9 +145,11 @@ public class DynamicSet implements ISet {
     @Override
     public ISet or(ISet set) {
         DynamicSet dSet = new DynamicSet(set);
-        ensureCapacity(dSet.arr.length - 1);
+        int maxInd = Math.max(arr.length, dSet.arr.length) - 1;
+        arr = ensureCapacity(maxInd, arr);
+        dSet.arr = ensureCapacity(maxInd, dSet.arr);
 
-        for (int i = 0; i < dSet.arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = arr[i] | dSet.arr[i];
         }
 
@@ -175,9 +160,11 @@ public class DynamicSet implements ISet {
     @Override
     public ISet xor(ISet set) {
         DynamicSet dSet = new DynamicSet(set);
-        ensureCapacity(dSet.arr.length - 1);
+        int maxInd = Math.max(arr.length, dSet.arr.length) - 1;
+        arr = ensureCapacity(maxInd, arr);
+        dSet.arr = ensureCapacity(maxInd, dSet.arr);
 
-        for (int i = 0; i < dSet.arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = arr[i] ^ dSet.arr[i];
         }
 
