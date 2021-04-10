@@ -1,6 +1,6 @@
 package com.yatsynaekateryna.lessons.lesson9;
 
-public class Deque implements IDeque {
+public class Deque implements IDeque, IArray {
 
     private static class Node {
         int val;
@@ -10,27 +10,27 @@ public class Deque implements IDeque {
 
     Node head;
     Node tail;
-    int lenght;
+    int length;
 
     public Deque() {
         head = new Node();
         tail = new Node();
         head.next = tail;
         tail.prev = head;
-        lenght = 0;
+        length = 0;
     }
 
-    @Override
+    @Override //O(1)
     public int length() {
-        return lenght;
+        return length;
     }
 
-    @Override
+    @Override //O(1)
     public boolean isEmpty() {
-        return lenght == 0;
+        return length == 0;
     }
 
-    @Override
+    @Override //(1)
     public void addFirst(int val) {
         Node newNode = new Node();
         newNode.val = val;
@@ -41,10 +41,10 @@ public class Deque implements IDeque {
         newNode.next = firstNode;
         firstNode.prev = newNode;
 
-        lenght++;
+        length++;
     }
 
-    @Override
+    @Override //O(1)
     public void addLast(int val) {
         Node newNode = new Node();
         newNode.val = val;
@@ -55,38 +55,115 @@ public class Deque implements IDeque {
         newNode.prev = lastNode;
         lastNode.next = newNode;
 
-        lenght++;
+        length++;
     }
 
-    @Override
+    @Override //O(1)
     public int getFirst() {
         return head.next.val;
     }
 
-    @Override
+    @Override //O(1)
     public int getLast() {
         return tail.prev.val;
     }
 
-    @Override
+    @Override //O(1)
     public int removeFirst() {
         int ans = getFirst();
 
         head.next = head.next.next;
         head.next.prev = head;
 
-        lenght--;
+        length--;
         return ans;
     }
 
-    @Override
+    @Override //O(1)
     public int removeLast() {
         int ans = getLast();
 
         tail.prev = tail.prev.prev;
         tail.prev.next = tail;
 
-        lenght--;
+        length--;
         return ans;
     }
+
+    @Override //O(1)
+    public void add(int val) {
+        addLast(val);
+    }
+
+    @Override //O(n)
+    public int get(int ind) {
+        if (ind >= length) {
+            return 0;}
+        Node get = find(ind);
+        return get.val;
+    }
+
+    @Override //O(n)
+    public void set(int ind, int val) {
+        if (ind < length) {
+            Node set = find(ind);
+            set.val = val;
+        }
+    }
+
+    @Override //O(n)
+    public void insert(int ind, int val) {
+        if (ind < length) {
+            Node insert = find(ind);
+
+            Node addNode = new Node();
+            addNode.val = insert.val;
+            insert.val = val;
+
+            Node firstNode = insert.next;
+
+            insert.next = addNode;
+            addNode.prev = insert;
+            addNode.next = firstNode;
+            firstNode.prev = addNode;
+
+            length++;
+        }
+    }
+
+    @Override //O(n)
+    public void remove(int ind) {
+        if (ind < length) {
+            Node remove = find(ind);
+            Node removeNext = remove.next;
+            remove.prev.next = removeNext;
+            remove.next.prev = remove.prev;
+
+            length--;
+        }
+
+    }
+
+     private Node find(int ind){ //O(n)
+        int middle = length / 2;
+        Node start;
+        Node get = new Node();
+
+        if (ind < middle) {
+            start = head;
+            for (int i = 0; i < ind + 1; i++) {
+                get = start.next;
+                start = start.next;
+            }
+        } else {
+            start = tail;
+            for (int i = 0; i < length - ind; i++) {
+                get = start.prev;
+                start = start.prev;
+            }
+        }
+        return get;
+    }
 }
+
+
