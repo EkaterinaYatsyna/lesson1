@@ -19,7 +19,7 @@ public class ImmutableSet implements ISet {
 
     public ImmutableSet(int[] arr) {
         for (int i : arr) {
-            val = val | 1 << i;
+            val = val | 1 << i                                                                          ;
         }
         len = Integer.bitCount(val);
     }

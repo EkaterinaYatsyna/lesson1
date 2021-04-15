@@ -58,6 +58,7 @@ public class main {
         queue.remove(5);
         printDeque(queue);
 
+
     }
 
     private static void printDeque(Deque queue) {

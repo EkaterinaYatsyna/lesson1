@@ -1,6 +1,7 @@
 package com.yatsynaekateryna.lessons.lesson9;
 
 public interface IArray {
+
     void add(int val);
 
     int get(int ind);
