@@ -19,8 +19,8 @@ public class main {
         // 2. Создать функцию которая проверяет может ли массив быть перестановкой.
         // Например {0, 1}, {2, 3, 0, 1}, {0} правильные. {2}, {1, 2}, {3, 8} неправильные.
 
-        //int[] checkArrPermutation = new int[]{1, 1, 0, 2, 6, 5, 3};
-        //System.out.println(isPermutation(checkArrPermutation));
+        int[] checkArrPermutation = new int[]{1, 1, 0, 2, 6, 5, 3};
+        System.out.println(isPermutation(checkArrPermutation));
 
         //3. Создать метод applyPermutation(int[] arr, int[] perm); Который будет применять перестановку.
         int[] arr = new int[]{26, 5, 13, 4, 7};
