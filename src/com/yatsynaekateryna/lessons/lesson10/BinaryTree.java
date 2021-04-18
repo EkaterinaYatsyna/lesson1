@@ -11,6 +11,9 @@ public class BinaryTree implements IStringSet, ISortedStringSet {
     TreeNode root;
     int size;
 
+    public BinaryTree() {
+    }
+
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
@@ -192,19 +195,41 @@ public class BinaryTree implements IStringSet, ISortedStringSet {
         return size() == 0;
     }
 
+    private String from;
+    private String upTo;
+    private BinaryTree primaryTree;
+
+    private BinaryTree(BinaryTree primaryTree, String from, String upTo) {
+        this.primaryTree = primaryTree;
+        this.from = from;
+        this.upTo = upTo;
+    }
     @Override
     public ISortedStringSet subset(String from, String upTo) {
-        //???
-        return this;
+        BinaryTree cur = new BinaryTree(this, from, upTo);
+        subset(cur.primaryTree.root, cur);
+        return cur;
+    }
+    private void subset(TreeNode cur, BinaryTree tree) {
+
+        if (cur != null) {
+
+            int compareFrom = compare(tree.from, cur.val);
+            int compareUpTo = compare(tree.upTo, cur.val);
+
+            if (compareFrom <= 0 && compareUpTo > 0) {
+                tree.add(cur.val);
+            }
+
+            subset(cur.left, tree);
+            subset(cur.right, tree);
+
+        }
     }
 
     @Override
     public String leftmost() {
-        TreeNode cur = root;
-        while (cur.left != null) {
-            cur = cur.left;
-        }
-        return cur.val;
+        return first(root);
     }
 
     private String first(TreeNode node) {
@@ -216,11 +241,29 @@ public class BinaryTree implements IStringSet, ISortedStringSet {
 
     @Override
     public String rightmost() {
-        TreeNode cur = root;
-        while (cur.right != null) {
-            cur = cur.right;
+        return last(root);
+    }
+
+    private String last(TreeNode node) {
+        while (node.right != null) {
+            node = node.right;
         }
-        return cur.val;
+        return node.val;
+    }
+
+    public int maxDepth() {
+        return maxDepthNode(root);
+    }
+
+    private int maxDepthNode(TreeNode cur) {
+        if (cur == null) {
+            return 0;
+        }
+        int left = (maxDepthNode(cur.left));
+        int right = (maxDepthNode(cur.right));
+
+        return 1 + Math.max(left, right);
+
     }
 }
 

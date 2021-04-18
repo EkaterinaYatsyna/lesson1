@@ -1,56 +1,100 @@
 package com.yatsynaekateryna.lessons.lesson10;
 
+import java.io.FileNotFoundException;
 import java.sql.Array;
 import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+import java.io.File;
 
 public class main {
-    public static void main(String[] args) {
-//        //1. Создать случайную перестановку (random permutation).
-//        //Например прямая перестановка длины 5 будет {0, 1, 2, 3, 4}. Случайная будет {1, 0, 4, 3, 2}.
-//
-//        int[] arrRandom = randomPermutation(5);
-//        System.out.println("randomPermutation(5):");
-//        System.out.println(Arrays.toString(arrRandom));
-//
-//        // 2. Создать функцию которая проверяет может ли массив быть перестановкой.
-//        // Например {0, 1}, {2, 3, 0, 1}, {0} правильные. {2}, {1, 2}, {3, 8} неправильные.
-//
-//        //int[] checkArrPermutation = new int[]{1, 1, 0, 2, 6, 5, 3};
-//        //System.out.println(isPermutation(checkArrPermutation));
-//
-//        //3. Создать метод applyPermutation(int[] arr, int[] perm); Который будет применять перестановку.
-//        int[] arr = new int[]{26, 5, 13, 4, 7};
-//        System.out.println("new arr:");
-//        System.out.println(Arrays.toString(arr));
-//
-//        applyPermutation(arr, arrRandom);
-//        System.out.println("applyPermutation:");
-//        System.out.println(Arrays.toString(arr));
+    public static void main(String[] args) throws FileNotFoundException {
+        //1. Создать случайную перестановку (random permutation).
+        //Например прямая перестановка длины 5 будет {0, 1, 2, 3, 4}. Случайная будет {1, 0, 4, 3, 2}.
+
+        int[] arrRandom = randomPermutation(5);
+        System.out.println("randomPermutation(5):");
+        System.out.println(Arrays.toString(arrRandom));
+
+        // 2. Создать функцию которая проверяет может ли массив быть перестановкой.
+        // Например {0, 1}, {2, 3, 0, 1}, {0} правильные. {2}, {1, 2}, {3, 8} неправильные.
+
+        //int[] checkArrPermutation = new int[]{1, 1, 0, 2, 6, 5, 3};
+        //System.out.println(isPermutation(checkArrPermutation));
+
+        //3. Создать метод applyPermutation(int[] arr, int[] perm); Который будет применять перестановку.
+        int[] arr = new int[]{26, 5, 13, 4, 7};
+        System.out.println("new arr:");
+        System.out.println(Arrays.toString(arr));
+
+        applyPermutation(arr, arrRandom);
+        System.out.println("applyPermutation:");
+        System.out.println(Arrays.toString(arr));
 
 
-        BinaryTreeRecursive treeRecursive = new BinaryTreeRecursive();
-        treeRecursive.add("молоко");
-        treeRecursive.add("авто");
-        treeRecursive.add("речка");
-        treeRecursive.add("автомобиль");
-        treeRecursive.add("река");
-        System.out.println(treeRecursive);
-        treeRecursive.remove("молоко");
-        System.out.println(treeRecursive);
+
+        if (true) {
+            Scanner scanner = new Scanner(new File("word_rus.txt"));
+            String[] arr2 = new String[34_010];
+            for (int i = 0; i < 34_010; i++) {
+                arr2[i] = scanner.nextLine();
+            }
+            shuffle(arr2);
+
+//BinaryTreeRecursive.add
+            BinaryTreeRecursive rusSetRecursive = new BinaryTreeRecursive();
+            long start = System.currentTimeMillis();
+            for (int i = 0; i < 34_010; i++) {
+                rusSetRecursive.add(arr2[i]);
+            }
+            long end = System.currentTimeMillis();
+            System.out.println("Time BinaryTreeRecursive.add = " + (end - start));
+
+//BinaryTree.add
+            IStringSet rusSet = new BinaryTree();
+            start = System.currentTimeMillis();
+            for (int i = 0; i < 34_010; i++) {
+                rusSet.add(arr2[i]);
+            }
+            end = System.currentTimeMillis();
+            System.out.println("Time BinaryTree.add = " + (end - start));
 
 
-        BinaryTree tree = new BinaryTree();
-        tree.add("молоко");
-        tree.add("авто");
-        tree.add("речка");
-        tree.add("автомобиль");
-        tree.add("река");
-        System.out.println(tree);
-//        System.out.println(tree.size());
-//        tree.remove("молоко");
-//        System.out.println(tree);
-        System.out.println(tree.leftmost());
-        System.out.println(tree.rightmost());
+//BinaryTreeRecursive.rem
+           // BinaryTreeRecursive rusSetRecursive = new BinaryTreeRecursive();
+            start = System.currentTimeMillis();
+            for (int i = 0; i < 10_000; i++) {
+                rusSetRecursive.remove(arr2[i]);
+            }
+            end = System.currentTimeMillis();
+            System.out.println("Time BinaryTreeRecursive.remove = " + (end - start));
+
+//BinaryTree.add
+//            IStringSet rusSet = new BinaryTree();
+            start = System.currentTimeMillis();
+            for (int i = 0; i < 10_000; i++) {
+                rusSet.remove(arr2[i]);
+            }
+            end = System.currentTimeMillis();
+            System.out.println("Time BinaryTree.remove = " + (end - start));
+        }
+    }
+
+    private static void shuffle(String[] arr) {
+
+        int length = arr.length;
+        Random random = new Random();
+
+        for (int i = 0; i < length; i++) {
+
+            int r = Math.abs(random.nextInt() >> 1) % length;
+
+            String temp = arr[i];
+            arr[i] = arr[r];
+            arr[r] = temp;
+
+        }
+
     }
 
     private static int[] randomPermutation(int len) {

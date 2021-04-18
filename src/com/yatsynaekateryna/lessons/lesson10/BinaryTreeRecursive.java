@@ -11,6 +11,9 @@ public class BinaryTreeRecursive implements IStringSet, ISortedStringSet {
     TreeNode root;
     int size;
 
+    public BinaryTreeRecursive() {
+    }
+
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
@@ -112,7 +115,6 @@ public class BinaryTreeRecursive implements IStringSet, ISortedStringSet {
         }
     }
 
-
     @Override
     public int size() {
         return size;
@@ -123,31 +125,37 @@ public class BinaryTreeRecursive implements IStringSet, ISortedStringSet {
         return size() == 0;
     }
 
+    private String from;
+    private String upTo;
+    private BinaryTreeRecursive primaryTree;
+
+    private BinaryTreeRecursive(BinaryTreeRecursive primaryTree, String from, String upTo) {
+        this.primaryTree = primaryTree;
+        this.from = from;
+        this.upTo = upTo;
+    }
+
     @Override
     public ISortedStringSet subset(String from, String upTo) {
-        int compare = compare(from, upTo);
-        if (compare == 0 || compare < 0) {
-            System.out.println("error");
-            return null;
-        }
-        BinaryTreeRecursive cur = new BinaryTreeRecursive();
-        cur.root.val = subsetRecursive(root, from, upTo).val;
-
+        BinaryTreeRecursive cur = new BinaryTreeRecursive(this, from, upTo);
+        subsetRecursive(cur.primaryTree.root, cur);
         return cur;
     }
 
-    private TreeNode subsetRecursive(TreeNode current, String from, String upTo) {
-        int compareUpTo = compare(upTo, current.val);
-        int compareFrom = compare(from, current.val);
-        if (compareFrom < 0 && compareUpTo > 0) {
-            return current;
-        } else if (compareUpTo <= 0) {
+    private void subsetRecursive(TreeNode cur, BinaryTreeRecursive tree) {
+        if (cur != null) {
 
-        } else {
+            int compareFrom = compare(tree.from, cur.val);
+            int compareUpTo = compare(tree.upTo, cur.val);
+
+            if (compareFrom <= 0 && compareUpTo > 0) {
+                tree.add(cur.val);
+            }
+
+            subsetRecursive(cur.left, tree);
+            subsetRecursive(cur.right, tree);
 
         }
-        return current;
-
     }
 
     @Override
@@ -162,12 +170,27 @@ public class BinaryTreeRecursive implements IStringSet, ISortedStringSet {
 
     @Override
     public String rightmost() {
-        return root.right == null ? root.val : first(root.right);
+        return root.right == null ? root.val : last(root.right);
     }
 
     private String last(TreeNode node) {
 
         return node.right == null ? node.val : first(node.right);
+    }
+
+    public int maxDepth() {
+        return maxDepthNode(root);
+    }
+
+    private int maxDepthNode(TreeNode cur) {
+        if (cur == null) {
+            return 0;
+        }
+        int left = (maxDepthNode(cur.left));
+        int right = (maxDepthNode(cur.right));
+
+        return 1 + Math.max(left, right);
+
     }
 
 }
