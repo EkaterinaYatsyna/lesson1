@@ -34,6 +34,11 @@ public class main {
         divisionAmoeba(24, 1);
     }
 
+
+    //cur = 253652
+    //%10 = 2
+    //cur/10 = 25365
+
     private static void divisionAmoeba(int hours, int cellsStart) {
         int cells = cellsStart;
         System.out.println("\n" + "Изначальное количество клеток: " + cellsStart);

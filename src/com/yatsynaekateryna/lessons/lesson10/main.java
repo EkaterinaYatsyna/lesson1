@@ -19,8 +19,8 @@ public class main {
         // 2. Создать функцию которая проверяет может ли массив быть перестановкой.
         // Например {0, 1}, {2, 3, 0, 1}, {0} правильные. {2}, {1, 2}, {3, 8} неправильные.
 
-        int[] checkArrPermutation = new int[]{1, 1, 0, 2, 6, 5, 3};
-        System.out.println(isPermutation(checkArrPermutation));
+        int[] checkArrPermutation = new int[]{ 1, 0, 2, 4, 5, 3};
+        System.out.println("массив "+ Arrays.toString(checkArrPermutation) +" является перестановкой: "+ isPermutation(checkArrPermutation));
 
         //3. Создать метод applyPermutation(int[] arr, int[] perm); Который будет применять перестановку.
         int[] arr = new int[]{26, 5, 13, 4, 7};
@@ -32,11 +32,10 @@ public class main {
         System.out.println(Arrays.toString(arr));
 
 
-
         if (true) {
             Scanner scanner = new Scanner(new File("word_rus.txt"));
             String[] arr2 = new String[34_010];
-            for (int i = 0; i < 34_010; i++) {
+            for (int i = 0; i < arr2.length; i++) {
                 arr2[i] = scanner.nextLine();
             }
             shuffle(arr2);
@@ -51,32 +50,36 @@ public class main {
             System.out.println("Time BinaryTreeRecursive.add = " + (end - start));
 
 //BinaryTree.add
-            IStringSet rusSet = new BinaryTree();
+            BinaryTree rusSet = new BinaryTree();
             start = System.currentTimeMillis();
             for (int i = 0; i < 34_010; i++) {
                 rusSet.add(arr2[i]);
             }
             end = System.currentTimeMillis();
             System.out.println("Time BinaryTree.add = " + (end - start));
+            System.out.println("максимальное число узлов в ветке: " + rusSet.maxDepth());
 
 
-//BinaryTreeRecursive.rem
-           // BinaryTreeRecursive rusSetRecursive = new BinaryTreeRecursive();
+//BinaryTreeRecursive.remove
+            // BinaryTreeRecursive rusSetRecursive = new BinaryTreeRecursive();
             start = System.currentTimeMillis();
-            for (int i = 0; i < 10_000; i++) {
+            for (int i = 0; i < 34_005; i++) {
                 rusSetRecursive.remove(arr2[i]);
             }
             end = System.currentTimeMillis();
             System.out.println("Time BinaryTreeRecursive.remove = " + (end - start));
+            System.out.println(rusSetRecursive);
 
-//BinaryTree.add
+//BinaryTree.remove
 //            IStringSet rusSet = new BinaryTree();
             start = System.currentTimeMillis();
-            for (int i = 0; i < 10_000; i++) {
+            for (int i = 0; i < 34_005; i++) {
                 rusSet.remove(arr2[i]);
             }
             end = System.currentTimeMillis();
             System.out.println("Time BinaryTree.remove = " + (end - start));
+            System.out.println(rusSet);
+
         }
     }
 
@@ -112,17 +115,14 @@ public class main {
     }//1. Создать случайную перестановку (random permutation). Например прямая перестановка длины 5 будет {0, 1, 2, 3, 4}. Случайная будет {1, 0, 4, 3, 2}.
 
     private static boolean isPermutation(int[] arr) {
+        BinaryTree tree = new BinaryTree();
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] >= arr.length) {
-                return false;
-            }
-            for (int j = i + 1; j < arr.length; j++) {
-                if (arr[i] == arr[j]) {
-                    return false;
-                }
-            }
+            tree.add(Integer.toString(arr[i]));
         }
-        return true;
+        if (arr.length == tree.size() && Integer.parseInt(tree.rightmost()) == arr.length - 1) {
+            return true;
+        }
+        return false;
     }//2. Создать функцию которая проверяет может ли массив быть перестановкой. Например {0, 1}, {2, 3, 0, 1}, {0} правильные. {2}, {1, 2}, {3, 8} неправильные.
 
     private static boolean applyPermutation(int[] arr, int[] perm) {

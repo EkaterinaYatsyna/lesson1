@@ -2,32 +2,25 @@ package com.yatsynaekateryna.lessons.lesson11;
 import com.sun.org.apache.xalan.internal.xsltc.compiler.util.NodeSetType;
 public class main {
     public static void main(String[] args) {
-        IMap map = new HashTable();
-        map.add("apple");
-        map.add("good");
-        map.add("nice");
-        map.add("friend");
-        map.add("love");
-        map.add("love");
-        map.add("love");
-        map.add("hello");
-        map.add("sun");
-        map.add("sun");
-        map.add("sun");
-        System.out.println(map);
+//        IMap map = new HashTable();
+//        map.add("apple");
+//        map.add("good");
+//        map.add("nice");
+//        map.add("friend");
+//        map.add("love");
+//        map.add("love");
+//        map.add("love");
+//        map.add("hello");
+//        map.add("sun");
+//        map.add("sun");
+//        map.add("sun");
+//        System.out.println(map);
 
         //1.Вывести самый распространенный символ в строке. Например для “abcdabbb” вывести b.
         // Если несколько символов встречаются одинаковое кол раз - вывести любой.
-        String str = "abcdabbb";
-        IMap hashTable = new HashTable();
-        for (char word : str.toCharArray()) {
-            hashTable.add(Character.toString(word));
-        }
-//        int maxVal = 0;
-//        String maxKey = "";
-//        //Node nn = hashTable.nodes;
+//        String str = "abcdabbb";
+//        IMap hashTable = new HashTable();
 
-        System.out.println(hashTable);
 
 
         //2.Вывести индексы самого распространенного символа в строке. Например для “abcdabbb” вывести b : {0, 5, 6, 7}.

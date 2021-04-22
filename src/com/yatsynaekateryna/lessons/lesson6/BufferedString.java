@@ -135,4 +135,7 @@ public class BufferedString implements IString {
             arr = newArr;
         }
     }
+
+
+
 }

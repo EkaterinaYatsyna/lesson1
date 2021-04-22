@@ -1,6 +1,8 @@
 package com.yatsynaekateryna.lessons.lesson10;
 
-public class BinaryTree implements IStringSet, ISortedStringSet {
+import java.util.*;
+
+public class BinaryTree implements IStringSet, ISortedStringSet, Iterable<String> {
 
     private static class TreeNode {
         String val;
@@ -106,7 +108,7 @@ public class BinaryTree implements IStringSet, ISortedStringSet {
         int compare;
 
         //находим узел(cur) и его родителя(curParent)
-        while (cur.val != val) {
+        while (!Objects.equals(cur.val, val)) {
             curParent = cur;
             compare = compare(val, cur.val);
             if (compare < 0) {
@@ -155,16 +157,22 @@ public class BinaryTree implements IStringSet, ISortedStringSet {
         //и самое сложное. если есть два потомка в узле
         else {
             String first = first(cur.right);
+            //Запишем в удаляемый узел самое левое значение
             if (cur == root) {
                 root.val = first;
             } else if (curParent.left == cur) {
                 curParent.left.val = first;
             } else {
                 curParent.right.val = first;
-            }
+            }//записали
 
-            if (cur.right.val == first) {
-                cur.right = null;
+            //нужно удалить самый нижний левый узел
+            if (Objects.equals(cur.right.val, first)) {
+                if (cur.right.right == null) { //если у самого левого узла нет правого потомка
+                    cur.right = null;
+                } else { //если у самого левого узла есть правый потомок
+                    cur.right = cur.right.right;
+                }
                 size--;
                 return true;
             }
@@ -172,7 +180,11 @@ public class BinaryTree implements IStringSet, ISortedStringSet {
             while (true) {
                 compare = compare(first, cur.left.val);
                 if (compare == 0) {
-                    cur.left = null;
+                    if (cur.left.right == null) { //если у самого левого узла нет правого потомка
+                        cur.left = null;
+                    } else { //если у самого левого узла есть правый потомок
+                        cur.left = cur.left.right;
+                    }
                     size--;
                     return true;
                 } else {
@@ -204,12 +216,14 @@ public class BinaryTree implements IStringSet, ISortedStringSet {
         this.from = from;
         this.upTo = upTo;
     }
+
     @Override
     public ISortedStringSet subset(String from, String upTo) {
         BinaryTree cur = new BinaryTree(this, from, upTo);
         subset(cur.primaryTree.root, cur);
         return cur;
     }
+
     private void subset(TreeNode cur, BinaryTree tree) {
 
         if (cur != null) {
@@ -264,6 +278,58 @@ public class BinaryTree implements IStringSet, ISortedStringSet {
 
         return 1 + Math.max(left, right);
 
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return new BinaryTreeIterator(root);
+    }
+
+    private static class BinaryTreeIterator implements Iterator<String> {
+
+        String next;
+        Queue<String> queue;
+
+
+        public BinaryTreeIterator(TreeNode root) {
+            queue = new LinkedList<>();
+            fillStack(root);
+            prepareNext();
+
+        }
+
+        private void fillStack(TreeNode node){
+            if (node != null) {
+                fillStack(node.left);
+                queue.add(node.val);
+                fillStack(node.right);
+            }
+        }
+
+        private void prepareNext() {
+
+            if(!queue.isEmpty()){
+                next = queue.remove();
+            }else {
+                next = null;
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return next != null;
+        }
+
+        @Override
+        public String next() {
+            if (this.hasNext()) {
+                String val = next;
+                prepareNext();
+                return val;
+            } else {
+                throw new NoSuchElementException();
+            }
+        }
     }
 }
 

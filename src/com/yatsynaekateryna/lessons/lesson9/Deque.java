@@ -1,6 +1,9 @@
 package com.yatsynaekateryna.lessons.lesson9;
 
-public class Deque implements IDeque, IArray {
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class Deque implements IDeque, IArray, Iterable<Integer> {
 
     private static class Node {
         int val;
@@ -164,6 +167,37 @@ public class Deque implements IDeque, IArray {
         }
         return get;
     }
+
+    @Override
+    public Iterator<Integer> iterator() {
+        return new DequeIterator(head);
+    }
+
+    private static class DequeIterator implements Iterator<Integer>{
+
+        Node cur;
+
+        public DequeIterator(Node head) {
+            this.cur = head.next;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cur.next != null;
+        }
+
+        @Override
+        public Integer next() {
+            if (this.hasNext()) {
+                int val = cur.val;
+                cur = cur.next;
+                return val;
+            } else {
+                throw new NoSuchElementException();
+            }
+        }
+    }
+
 }
 
 

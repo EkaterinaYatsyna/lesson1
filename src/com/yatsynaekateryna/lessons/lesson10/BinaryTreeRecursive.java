@@ -1,6 +1,11 @@
 package com.yatsynaekateryna.lessons.lesson10;
 
-public class BinaryTreeRecursive implements IStringSet, ISortedStringSet {
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Queue;
+
+public class BinaryTreeRecursive implements IStringSet, ISortedStringSet,Iterable<String> {
 
     private static class TreeNode {
         String val;
@@ -193,4 +198,55 @@ public class BinaryTreeRecursive implements IStringSet, ISortedStringSet {
 
     }
 
+    @Override
+    public Iterator<String> iterator() {
+        return new BinaryTreeRecursiveIterator(root);
+    }
+
+    private static class BinaryTreeRecursiveIterator implements Iterator<String> {
+
+        String next;
+        Queue<String> queue;
+
+        public BinaryTreeRecursiveIterator(TreeNode root) {
+            queue = new LinkedList<>();
+            fillStack(root);
+            prepareNext();
+
+        }
+
+        private void fillStack(TreeNode node){
+            if (node != null) {
+                fillStack(node.left);
+                queue.add(node.val);
+                fillStack(node.right);
+            }
+        }
+
+        private void prepareNext() {
+
+            if(!queue.isEmpty()){
+                next = queue.remove();
+            }else {
+                next = null;
+            }
+        }
+
+
+        @Override
+        public boolean hasNext() {
+            return next != null;
+        }
+
+        @Override
+        public String next() {
+            if (this.hasNext()) {
+                String val = next;
+                prepareNext();
+                return val;
+            } else {
+                throw new NoSuchElementException();
+            }
+        }
+    }
 }

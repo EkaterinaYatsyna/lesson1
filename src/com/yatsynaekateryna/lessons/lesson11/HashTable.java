@@ -2,7 +2,11 @@ package com.yatsynaekateryna.lessons.lesson11;
 
 import com.sun.org.apache.xalan.internal.xsltc.compiler.util.NodeSetType;
 
-public class HashTable implements IMap {
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+
+public class HashTable implements IMap, Iterable<String> {
     double loadFactor;
     int cap;
     int size;
@@ -10,7 +14,7 @@ public class HashTable implements IMap {
 
     public HashTable() {
         loadFactor = 0.75;
-        cap = 16;
+        cap = 4;
         nodes = new Node[cap];
     }
 
@@ -30,7 +34,7 @@ public class HashTable implements IMap {
 
     private void ensureCapacity() {
 
-        if (cap < loadFactor * size) {
+        if (size > loadFactor * cap) {
             cap += cap / 2;
             Node[] newArr = new Node[cap];
             for (Node node : nodes) {
@@ -156,11 +160,7 @@ public class HashTable implements IMap {
     @Override
     public String toString() {
         StringBuilder ans = new StringBuilder();
-        //{
-        //for nodes
-        //    col
-        //        [key, value]
-        //}
+
         ans.append("{\n");
         for (Node node : nodes) {
 
@@ -180,5 +180,69 @@ public class HashTable implements IMap {
 
 
         return ans.toString();
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return new HashTableIterator(nodes);
+    }
+
+    private static class HashTableIterator implements Iterator<String> {
+
+        Node[] nodes;
+        int nextInd;
+        Node cur;
+        String nextValue;
+
+        public HashTableIterator(Node[] nodes) {
+            this.nodes = nodes;
+            this.nextInd = 0;
+            prepareNext();
+        }
+
+        private void prepareNext() {
+
+            while (nodes[nextInd] == null) {
+                nextInd++;
+                if (nextInd == nodes.length) {
+                    nextValue = null;
+                    return;
+                }
+            }
+
+            if (cur == null) {
+                cur = nodes[nextInd];
+            }
+            nextValue = cur.key;
+
+            if (cur.next != null) {
+                cur = cur.next;
+            }else{
+                nextInd++;
+                if (nextInd == nodes.length) {
+                    nextValue = null;
+                }else{
+                    cur = nodes[nextInd];
+                }
+            }
+
+        }
+
+        @Override
+        public boolean hasNext() {
+            return nextValue != null;
+        }
+
+        @Override
+        public String next() {
+            if (this.hasNext()) {
+                String val = nextValue;
+                prepareNext();
+                return val;
+            } else {
+                throw new NoSuchElementException();
+            }
+
+        }
     }
 }
