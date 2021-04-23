@@ -288,7 +288,6 @@ public class BinaryTree implements IStringSet, ISortedStringSet, Iterable<String
     private static class BinaryTreeIterator implements Iterator<String> {
 
         TreeNode root;
-        TreeNode parent;
         TreeNode next;
 
 
