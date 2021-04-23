@@ -170,20 +170,22 @@ public class Deque implements IDeque, IArray, Iterable<Integer> {
 
     @Override
     public Iterator<Integer> iterator() {
-        return new DequeIterator(head);
+        return new DequeIterator(head,tail);
     }
 
     private static class DequeIterator implements Iterator<Integer>{
 
         Node cur;
+        Node tail;
 
-        public DequeIterator(Node head) {
+        public DequeIterator(Node head,Node tail) {
             this.cur = head.next;
+            this.tail = tail;
         }
 
         @Override
         public boolean hasNext() {
-            return cur.next != null;
+            return cur != tail;
         }
 
         @Override

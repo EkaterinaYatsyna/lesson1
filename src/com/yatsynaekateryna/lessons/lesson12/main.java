@@ -21,6 +21,7 @@ public class main {
         for (int i = 0; i < arr2.length; i++) {
             arr2[i] = scanner.nextLine();
         }
+        shuffle(arr2);
         System.out.println(Arrays.toString(arr2));
 
 
@@ -40,6 +41,7 @@ public class main {
         deque.add(8);
         deque.add(16);
         deque.add(13);
+        deque.add(0);
         deque.add(8);
         for (int cur : deque) {
             System.out.print(cur + " ");
@@ -47,9 +49,11 @@ public class main {
 
         System.out.println("\n\n--- BinaryTree ---");
         BinaryTree set = new BinaryTree();
+        String[]arr3 = new String[]{"абака", "аббатиса", "абажур", "абаз", "аббревиатура", "абазин", "аббат", "абазинка", "аббатство", "аббатисса"};
         for (String i : arr2) {
             set.add(i);
         }
+        System.out.println(set);
         for (String cur : set) {
             System.out.print(cur + " ");
         }
@@ -58,6 +62,23 @@ public class main {
         ISortedStringSet set2 = set.subset("абазинка", "абвер");
         for (String cur2 : set2) {
             System.out.print(cur2 + " ");
+        }
+
+    }
+
+    private static void shuffle(String[] arr) {
+
+        //int length = arr.length;
+        Random random = new Random();
+
+        for (int i = 0; i < arr.length; i++) {
+
+            int r = Math.abs(random.nextInt() >> 1) % arr.length;
+
+            String temp = arr[i];
+            arr[i] = arr[r];
+            arr[r] = temp;
+
         }
 
     }

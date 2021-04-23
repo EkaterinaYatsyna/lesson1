@@ -287,33 +287,60 @@ public class BinaryTree implements IStringSet, ISortedStringSet, Iterable<String
 
     private static class BinaryTreeIterator implements Iterator<String> {
 
-        String next;
-        Queue<String> queue;
+        TreeNode root;
+        TreeNode parent;
+        TreeNode next;
 
 
         public BinaryTreeIterator(TreeNode root) {
-            queue = new LinkedList<>();
-            fillStack(root);
+            this.root = root;
             prepareNext();
-
         }
 
-        private void fillStack(TreeNode node){
-            if (node != null) {
-                fillStack(node.left);
-                queue.add(node.val);
-                fillStack(node.right);
-            }
+        private int compare(String first, String second) {
+            return String.CASE_INSENSITIVE_ORDER.compare(first, second);
         }
 
         private void prepareNext() {
+            if (next == null) {   //нашли самый левый
+                next = root;
+                while (next.left != null) {
+                    next = next.left;
+                }
+                return;
+            }
 
-            if(!queue.isEmpty()){
-                next = queue.remove();
-            }else {
-                next = null;
+            if (next.right != null) { //есть правый потомок
+                next = next.right;
+                while (next.left != null) {
+                    next = next.left;
+                }
+            } else {
+                TreeNode cur = root;
+                while (true) {
+                    int compare = compare(next.val, cur.val);
+                    if (compare == 0) {
+                        next = null;
+                        break;
+                    } else if (compare < 0) {
+                        if (cur.left == next) {
+                            next = cur;
+                            break;
+                        } else {
+                            cur = cur.left;
+                        }
+                    } else {
+                        if (cur.right == next) {
+                            next = cur;
+                            cur = root;
+                        } else {
+                            cur = cur.right;
+                        }
+                    }
+                }
             }
         }
+
 
         @Override
         public boolean hasNext() {
@@ -323,7 +350,7 @@ public class BinaryTree implements IStringSet, ISortedStringSet, Iterable<String
         @Override
         public String next() {
             if (this.hasNext()) {
-                String val = next;
+                String val = next.val;
                 prepareNext();
                 return val;
             } else {
