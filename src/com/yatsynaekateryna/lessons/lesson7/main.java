@@ -10,11 +10,11 @@ public class main {
         //1. Посчитать кол чисел в диапазоне [1..n] которые делятся ИЛИ на 2 ИЛИ на 3 ИЛИ на 5 ИЛИ на 7 .
         //Использовать long. Решение должно быть за константу.
         {
-//            long n = 20;
-//            long divisionOfNumbers = n / 2 + n / 3 + n / 5 + n / 7;
-//            divisionOfNumbers = divisionOfNumbers - n / (2 * 3) - n / (2 * 5) - n / (2 * 7) - n / (3 * 5) - n / (3 * 7) - n / (5 * 7);
-//            divisionOfNumbers = divisionOfNumbers + 3 * (n / (2 * 3 * 5 * 7)) + (n / (2 * 3 * 5)) + (n / (3 * 5 * 7)) + (n / (3 * 5 * 7));
-//            System.out.println(divisionOfNumbers);
+            long n = 2000;
+            long divisionOfNumbers = n / 2 + n / 3 + n / 5 + n / 7;
+            divisionOfNumbers = divisionOfNumbers - n / (2 * 3) - n / (2 * 5) - n / (2 * 7) - n / (3 * 5) - n / (3 * 7) - n / (5 * 7) - (n / (2 * 3 * 5 * 7));
+            divisionOfNumbers = divisionOfNumbers  + (n / (2 * 3 * 5)) + (n / (3 * 5 * 7)) + (n / (5 * 7 * 2) + (n / (3 * 7 * 2)));
+            System.out.println(divisionOfNumbers);
         }
 
 
