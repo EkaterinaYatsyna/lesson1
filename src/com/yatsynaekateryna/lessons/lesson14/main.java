@@ -36,7 +36,7 @@ public class main {
         //4. Сыграть в игру со структурой данных GuessNumberGame. И угадать 8192 битное число.
         System.out.println("\n4. Сыграть в игру со структурой данных GuessNumberGame. И угадать 8192 битное число.");
         GuessNumberGame guessNumberGame = new GuessNumberGame();
-        System.out.println("you need to guess the number: "+guessNumberGame);
+        System.out.println("you need to guess the number: " + guessNumberGame);
         System.out.println("good luck :)");
         BigInteger answer = guessNumber(guessNumberGame);
 
