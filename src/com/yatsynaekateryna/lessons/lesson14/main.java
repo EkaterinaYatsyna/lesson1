@@ -2,9 +2,11 @@ package com.yatsynaekateryna.lessons.lesson14;
 
 import com.yatsynaekateryna.lessons.lesson6.BufferedArray;
 
+import javax.xml.bind.SchemaOutputResolver;
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Random;
+import java.util.function.Predicate;
+
 
 public class main {
     public static void main(String[] args) {
@@ -39,34 +41,37 @@ public class main {
         System.out.println("you need to guess the number: " + guessNumberGame);
         System.out.println("good luck :)");
         BigInteger answer = guessNumber(guessNumberGame);
+        System.out.println(answer);
 
 
     }
 
     private static BigInteger guessNumber(GuessNumberGame num) {
-        BigInteger from = new BigInteger("0");
-        BigInteger upTo = new BigInteger("2").pow(8192).subtract(new BigInteger("1"));
-        int attempts = 0;
-        if (num.guess(from) == 0) {
-            System.out.println("number of attempts: " + attempts + 1);
-            return from;
-        } else if (num.guess(upTo) == 0) {
-            System.out.println("number of attempts: " + attempts + 1);
-            return upTo;
-        } else {
-            BigInteger mid = upTo.subtract(from).divide(new BigInteger("2")).add(from);
-            while (num.guess(mid) != 0) {
-                if (num.guess(mid) < 0) {
-                    upTo = mid;
-                } else {
-                    from = mid;
-                }
-                attempts++;
-                mid = upTo.subtract(from).divide(new BigInteger("2")).add(from);
+        BigInteger from = new BigInteger("0").subtract(BigInteger.ONE);
+        BigInteger upTo = new BigInteger("2").pow(8192).subtract(BigInteger.ONE);
+
+        return lowerBound(from,
+                upTo,
+                (valToCheck) -> {
+                    // TODO: 10.05.2021 Напиши стратегию тут
+                    return num.guess(valToCheck) <= 0;
+                });
+
+    }
+
+    //Этот метод не трогай
+    private static BigInteger lowerBound(BigInteger fromExclusive,
+                                         BigInteger toInclusive,
+                                         Predicate<BigInteger> predicate) {
+        while (toInclusive.subtract(fromExclusive).compareTo(BigInteger.ONE) > 0) {
+            BigInteger mid = fromExclusive.add(toInclusive.subtract(fromExclusive).divide(new BigInteger("2")));
+            if (predicate.test(mid)) {
+                toInclusive = mid;
+            } else {
+                fromExclusive = mid;
             }
-            System.out.println("number of attempts: " + attempts);
-            return mid;
         }
+        return toInclusive;
     }
 
 
